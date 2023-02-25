@@ -12,4 +12,8 @@ https://docs.google.com/spreadsheets/d/191WWNpjJ2za6-nbG4ZoUMXMpUK8KlCIosvQB0f-o
  - docker build -t envoy:v1 . && docker run -p 8080:10000 -p 9901:9901 --rm -v $(pwd)/logs/file.log:/tmp/admin_access.log envoy:v1
 
 
- - prometheus --config.file=prometheus.yaml --web.listen-address=localhost:9090 --storage.tsdb.path=$(mktemp -d)
+ - prometheus --config.file=prometheus.yaml --web.listen-address=localhost:9090 --storage.tsdb.path=$(mktemp -d)  # for local prometheus
+
+
+
+ - docker-compose up -d  # 

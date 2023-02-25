@@ -7,4 +7,4 @@ scrape_configs:
   metrics_path: /stats/prometheus
   static_configs:
   - targets:
-    - localhost:9901
+    - host.docker.internal:9901  # localhost:9901 does not work
