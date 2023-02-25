@@ -1,4 +1,4 @@
-# kuber-experiments
+# diploma-experiments
 for diploma
 
 
