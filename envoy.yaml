@@ -24,6 +24,11 @@ static_resources:
               - match: { prefix: "/" }
                 route: { cluster: some_service }
           http_filters:
+          - name: envoy.filters.http.grpc_stats
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.grpc_stats.v3.FilterConfig
+              emit_filter_state: true
+              stats_for_all_methods: true
           - name: envoy.filters.http.router
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
