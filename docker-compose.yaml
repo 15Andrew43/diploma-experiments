@@ -40,3 +40,19 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
+    depends_on:
+      - envoy
+
+  grafana:
+      image: grafana/grafana
+      ports:
+        - 3000:3000
+      restart: unless-stopped
+      volumes:
+        - ./grafana:/etc/grafana/provisioning/datasources
+        - grafana-data:/var/lib/grafana
+    # depends_on:
+    #   - prometheus
+
+volumes:
+  grafana-data:
