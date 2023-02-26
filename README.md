@@ -18,6 +18,8 @@ https://docs.google.com/spreadsheets/d/191WWNpjJ2za6-nbG4ZoUMXMpUK8KlCIosvQB0f-o
 
  - prometheus --config.file=prometheus.yaml --web.listen-address=localhost:9090 --storage.tsdb.path=$(mktemp -d)  # for local prometheus
 
+ - brew services start grafana
+
 ## 2nd way:
 
  - docker-compose up -d
