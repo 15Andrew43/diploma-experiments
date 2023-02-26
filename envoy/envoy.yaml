@@ -73,15 +73,10 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: host.docker.internal # localhost and 127.0.0.1 don't work
-                port_value: 8081
+                address: 51.250.101.126
+                port_value: 8099
         - endpoint:
             address:
               socket_address:
-                address: host.docker.internal # localhost and 127.0.0.1 don't work
-                port_value: 8082
-        - endpoint:
-            address:
-              socket_address:
-                address: host.docker.internal # localhost and 127.0.0.1 don't work
-                port_value: 8083
+                address: 62.84.121.68
+                port_value: 8099
