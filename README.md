@@ -23,3 +23,7 @@ https://docs.google.com/spreadsheets/d/191WWNpjJ2za6-nbG4ZoUMXMpUK8KlCIosvQB0f-o
 ## 2nd way:
 
  - docker-compose up -d
+
+
+## important
+logs/file.log must exist before running container 
