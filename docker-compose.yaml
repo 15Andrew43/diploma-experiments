@@ -27,7 +27,9 @@ services:
     volumes:
       - ./envoy/logs/file.log:/tmp/admin_access.log
     depends_on:
-      - my-web-db
+      - my-web-db-1
+      - my-web-db-2
+      - my-web-db-3
 
   prometheus:
     image: prom/prometheus
