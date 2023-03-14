@@ -27,3 +27,10 @@
       - 9901:9901
     volumes:
       - ./envoy/logs/file.log:/tmp/admin_access.log
+
+
+- name: generate envoy.yaml
+  template:
+    src: envoy.j2
+    dest: ~/envoy.yaml
+    mode: 0555
