@@ -1,0 +1,14 @@
+---
+# tasks file for web_db
+- debug:
+    msg: "Deploy {{ env }}-{{ service_name }}"
+
+- name: Restart a container
+  community.docker.docker_container:
+    name: web_db
+    image: avborovets/restful_api_example
+    state: started
+    restart: true
+    ports:
+     # Publish container port 9000 as host port 8080
+     - "8099:8099"

@@ -1,0 +1,10 @@
+---
+
+- name: Setup project role
+  hosts: web_db
+  become: yes
+
+  roles:
+    - docker
+    - web_db
+    - backend

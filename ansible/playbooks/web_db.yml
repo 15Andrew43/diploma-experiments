@@ -1,0 +1,9 @@
+---
+
+- name: Setup web_db role
+  hosts: web_db
+  become: yes
+
+  roles:
+    - docker
+    - web_db

@@ -1,0 +1,6 @@
+---
+# defaults file for web_db
+web_db:
+  name: 'database-with-web'
+
+service_name: "{{ web_db.name }}"

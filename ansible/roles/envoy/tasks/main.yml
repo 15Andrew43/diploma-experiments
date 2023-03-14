@@ -1,0 +1,29 @@
+---
+# tasks file for envoy
+- debug:
+    msg: "Deploy {{ env }}-{{ service_name }}"
+
+- name: Create /envoy/logs
+  file:
+    path: ./envoy/logs/
+    state: directory
+    mode: 0777
+
+- name: Create file.log
+  file:
+    path: ./envoy/logs/file.log
+    state: touch
+    mode: 0777
+
+- name: Restart a container
+  community.docker.docker_container:
+    name: envoy
+    image: avborovets/envoy
+    state: started
+    restart: true
+    ports:
+     # Publish container port 9000 as host port 8080
+      - 8080:10000
+      - 9901:9901
+    volumes:
+      - ./envoy/logs/file.log:/tmp/admin_access.log
