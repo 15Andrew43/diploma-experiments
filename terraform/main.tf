@@ -102,6 +102,47 @@ resource "yandex_compute_instance" "envoy" {
 }
 
 
+resource "yandex_compute_instance" "observability" {
+  name   = "observability-name"
+
+  resources {
+    cores  = 2
+    memory = 4
+    core_fraction = 20
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update"
+    ]
+    connection {
+      type = "ssh"
+      user = var.yc_user
+      private_key = file(var.ssh_key)
+      host = self.network_interface[0].nat_ip_address
+    }
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd8kdq6d0p8sij7h5qe3"
+      size     = 15
+    }
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-1.id
+    nat       = true
+  }
+
+  metadata = {
+    user-data = "${file("./meta.txt")}"
+  }
+
+  scheduling_policy {
+    preemptible = true
+  }
+}
 
 
 

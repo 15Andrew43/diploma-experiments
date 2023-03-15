@@ -6,3 +6,7 @@ ${ip}
 [envoy]
 ${envoy}
 
+
+[observability]
+${observability}
+
