@@ -15,10 +15,31 @@
     state: touch
     mode: 0777
 
+- name: generate envoy.yaml
+  template:
+    src: envoy.j2
+    dest: ~/envoy.yaml
+    mode: 0555
+
+- name: copy Dockerfile
+  copy:
+    src: Dockerfile
+    dest: ~/Dockerfile
+    mode: 0555
+
+- name: Create docker image
+  community.docker.docker_image:
+    build:
+      path: ~/
+    name: my_envoy_image
+    # tag: v1
+    # push: true
+    source: build
+
 - name: Restart a container
   community.docker.docker_container:
     name: envoy
-    image: avborovets/envoy
+    image: my_envoy_image #  avborovets/envoy
     state: started
     restart: true
     ports:
@@ -29,8 +50,3 @@
       - ./envoy/logs/file.log:/tmp/admin_access.log
 
 
-- name: generate envoy.yaml
-  template:
-    src: envoy.j2
-    dest: ~/envoy.yaml
-    mode: 0555

@@ -70,19 +70,13 @@ static_resources:
       cluster_name: some_service
       endpoints:
       - lb_endpoints:
-        - endpoint:
-            address:
-              socket_address:
-                address: 158.160.1.84
-                port_value: 8099
-        - endpoint:
-            address:
-              socket_address:
-                address: 158.160.31.230
-                port_value: 8099
-   bruh pep lol     
 {% for host in groups['web_db'] %}
-   {{ host }}
-   {{ hostvars[host].env }}
-   {{ hostvars }}
+        - endpoint:
+            address:
+              socket_address:
+                address: {{ host }}
+                port_value: 8099
 {% endfor %}
+
+
+# {{ hostvars }}
