@@ -6,5 +6,5 @@ resource "local_file" "hosts_cfg" {
       envoy = yandex_compute_instance.envoy.network_interface[0].nat_ip_address
     }
   )
-  filename = "./hosts.txt"
+  filename = "../ansible/hosts.txt"
 }

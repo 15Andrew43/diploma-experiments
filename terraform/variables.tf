@@ -1,11 +1,11 @@
 variable "ssh_key" {
     description = "SSH Key"
-    default = "~/.ssh/id_rsa"
+    default = "/Users/andrew_borovets/Desktop/ssh_key_project"
 }
 
 variable "yc_user" {
     description = "User to run instance"
-    default = "ubuntu"
+    default = "ansible_master"
 }
 
 

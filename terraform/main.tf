@@ -50,7 +50,11 @@ resource "yandex_compute_instance" "vm-web-db" {
   }
 
   metadata = {
-    ssh-keys = "${var.yc_user}:${file("${var.ssh_key}.pub")}"
+    user-data = "${file("./meta.txt")}"
+  }
+
+  scheduling_policy {
+    preemptible = true
   }
 }
 
@@ -89,7 +93,11 @@ resource "yandex_compute_instance" "envoy" {
   }
 
   metadata = {
-    ssh-keys = "${var.yc_user}:${file("${var.ssh_key}.pub")}"
+    user-data = "${file("./meta.txt")}"
+  }
+
+  scheduling_policy {
+    preemptible = true
   }
 }
 
