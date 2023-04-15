@@ -17,6 +17,7 @@ cd ../ansible
 ansible-playbook playbooks/web_db.yml
 ansible-playbook playbooks/envoy.yml
 ansible-playbook playbooks/prometheus.yml
+ansible-playbook playbooks/grafana.yml
 
 echo
 echo "==================================================================="

@@ -1,0 +1,60 @@
+---
+# tasks file for prometheus
+- debug:
+    msg: "Deploy {{ env }}-{{ service_name }}"
+
+- name: Create /etc/grafana/provisioning
+  file:
+    path: /etc/grafana/provisioning
+    state: directory
+    mode: 0777
+
+- name: Create /etc/grafana/provisioning/datasources
+  file:
+    path: /etc/grafana/provisioning/datasources
+    state: directory
+    mode: 0777
+
+- name: Create /etc/grafana/provisioning/dashboards
+  file:
+    path: /etc/grafana/provisioning/dashboards
+    state: directory
+    mode: 0777
+
+- name: Copy datasource
+  copy:
+    src: prometheus_ds.yml
+    dest: /etc/grafana/provisioning/datasources/prometheus_ds.yml
+    mode: 0777
+
+# - name: Copy config.ini
+#   copy:
+#     src: config.ini
+#     dest: /etc/grafana/config.ini
+#     mode: 0777
+
+- name: Restart a container
+  community.docker.docker_container:
+    name: grafana
+    image: grafana/grafana:latest
+    state: started
+    restart: true
+    user: 104
+    volumes:
+      # - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      # - ./grafana/datasources:/etc/grafana/datasources
+      # - ./grafana/dashboards:/etc/grafana/dashboards
+    # command:
+    #   - "--user 104"
+    env:
+      GF_SECURITY_ADMIN_USER: "admin"
+      GF_SECURITY_ADMIN_PASSWORD: "qwerty"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      # GF_INSTALL_PLUGINS: "prometheus"
+      # GF_PATHS_CONFIG: "/etc/grafana/config.ini"
+      # user: "104"
+    ports:
+      - 3000:3000
+    # volumes:
+    # - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:Z

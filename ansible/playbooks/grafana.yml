@@ -1,0 +1,8 @@
+---
+- name: Setup grafana role
+  hosts: observability
+  become: yes
+
+  roles:
+    # - docker
+    - grafana

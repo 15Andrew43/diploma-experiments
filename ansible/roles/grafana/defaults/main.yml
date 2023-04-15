@@ -1,0 +1,6 @@
+---
+# defaults file for grafana
+grafana:
+  name: "grafana"
+
+service_name: "{{ grafana.name }}"
