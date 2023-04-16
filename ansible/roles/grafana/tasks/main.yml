@@ -19,6 +19,14 @@
     # group: 472
     mode: 0777
 
+- name: Copy datasource
+  copy:
+    src: prometheus_ds.yml
+    dest: ./grafana/provisioning/datasources/prometheus_ds.yml # /etc/grafana/provisioning/datasources/prometheus_ds.yml
+    # owner: 472
+    # group: 472
+    mode: 0777
+
 - name: Create /etc/grafana/provisioning/dashboards
   file:
     path: ./grafana/provisioning/dashboards # /etc/grafana/provisioning/dashboards
@@ -27,10 +35,26 @@
     # group: 472
     mode: 0777
 
-- name: Copy datasource
+- name: Copy dashboard yml
   copy:
-    src: prometheus_ds.yml
-    dest: ./grafana/provisioning/datasources/prometheus_ds.yml # /etc/grafana/provisioning/datasources/prometheus_ds.yml
+    src: dashboard.yml
+    dest: ./grafana/provisioning/dashboards/dashboard.yml
+    # owner: 472
+    # group: 472
+    mode: 0777
+
+- name: Create /etc/grafana/dashboards
+  file:
+    path: ./grafana/dashboards # /etc/grafana/provisioning/dashboards
+    state: directory
+    # owner: 472
+    # group: 472
+    mode: 0777
+
+- name: Copy dashboards json
+  copy:
+    src: my-panel.json
+    dest: ./grafana/dashboards/my-panel.json
     # owner: 472
     # group: 472
     mode: 0777
@@ -56,6 +80,7 @@
     volumes:
       # - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/home/ansible_master/grafana/provisioning # /etc/grafana/provisioning
+      - ./grafana/dashboards:/home/ansible_master/grafana/dashboards
       # - ./grafana/datasources:/etc/grafana/datasources
       # - ./grafana/dashboards:/etc/grafana/dashboards
     # command:
