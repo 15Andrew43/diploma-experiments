@@ -14,6 +14,7 @@ echo
 
 cd ../ansible
 
+ansible-playbook playbooks/docker.yml
 ansible-playbook playbooks/web_db.yml
 ansible-playbook playbooks/envoy.yml
 ansible-playbook playbooks/prometheus.yml

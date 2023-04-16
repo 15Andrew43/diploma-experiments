@@ -58,3 +58,14 @@
       - 3000:3000
     # volumes:
     # - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:Z
+
+- name: Create a network
+  community.docker.docker_network:
+    name: my_super_network
+
+- name: Remove all but selected list of containers
+  community.docker.docker_network:
+    name: my_super_network
+    connected:
+      - grafana
+      - prometheus

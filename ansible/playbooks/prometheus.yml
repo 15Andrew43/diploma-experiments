@@ -1,9 +1,8 @@
 ---
-
 - name: Setup prometheus role
   hosts: observability
   become: yes
 
   roles:
-    - docker
+    # - docker
     - prometheus

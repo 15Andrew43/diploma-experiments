@@ -10,3 +10,9 @@ ${envoy}
 [observability]
 ${observability}
 
+[docker]
+%{ for ip in web_db ~}
+${ip}
+%{ endfor ~}
+${envoy}
+${observability}

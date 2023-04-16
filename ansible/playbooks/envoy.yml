@@ -1,9 +1,8 @@
 ---
-
 - name: Setup envoy role
   hosts: envoy
   become: yes
 
   roles:
-    - docker
+    # - docker
     - envoy
