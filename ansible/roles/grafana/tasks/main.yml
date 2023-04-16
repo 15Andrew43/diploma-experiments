@@ -5,27 +5,38 @@
 
 - name: Create /etc/grafana/provisioning
   file:
-    path: /etc/grafana/provisioning
+    path: ./grafana/provisioning #/ /etc/grafana/provisioning
     state: directory
+    # owner: 472
+    # group: 472
     mode: 0777
 
 - name: Create /etc/grafana/provisioning/datasources
   file:
-    path: /etc/grafana/provisioning/datasources
+    path: ./grafana/provisioning/datasources # /etc/grafana/provisioning/datasources
     state: directory
+    # owner: 472
+    # group: 472
     mode: 0777
 
 - name: Create /etc/grafana/provisioning/dashboards
   file:
-    path: /etc/grafana/provisioning/dashboards
+    path: ./grafana/provisioning/dashboards # /etc/grafana/provisioning/dashboards
     state: directory
+    # owner: 472
+    # group: 472
     mode: 0777
 
 - name: Copy datasource
   copy:
     src: prometheus_ds.yml
-    dest: /etc/grafana/provisioning/datasources/prometheus_ds.yml
+    dest: ./grafana/provisioning/datasources/prometheus_ds.yml # /etc/grafana/provisioning/datasources/prometheus_ds.yml
+    # owner: 472
+    # group: 472
     mode: 0777
+
+- name: Change owner
+  ansible.builtin.shell: chown -R 472:472 ./grafana
 
 # - name: Copy config.ini
 #   copy:
@@ -36,24 +47,27 @@
 - name: Restart a container
   community.docker.docker_container:
     name: grafana
-    image: grafana/grafana:latest
+    image: grafana/grafana:latest # 5.2.4
     state: started
     restart: true
-    user: 104
+    user: "472:472"
+    # group: 472 # 472
+    # user: 1000
     volumes:
       # - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/provisioning:/home/ansible_master/grafana/provisioning # /etc/grafana/provisioning
       # - ./grafana/datasources:/etc/grafana/datasources
       # - ./grafana/dashboards:/etc/grafana/dashboards
     # command:
-    #   - "--user 104"
+    #   - "--user 472"
     env:
       GF_SECURITY_ADMIN_USER: "admin"
       GF_SECURITY_ADMIN_PASSWORD: "qwerty"
       GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_PATHS_PROVISIONING: "/home/ansible_master/grafana/provisioning" # to see all var: to run 'env' in docker container
       # GF_INSTALL_PLUGINS: "prometheus"
       # GF_PATHS_CONFIG: "/etc/grafana/config.ini"
-      # user: "104"
+      # user: "472"
     ports:
       - 3000:3000
     # volumes:
