@@ -15,13 +15,13 @@ provider "yandex" {
 
 
 resource "yandex_compute_instance" "vm-web-db" {
-  name   = "vm-web-db-${count.index}"
+  name = "vm-web-db-${count.index}"
 
   count = 2
 
   resources {
-    cores  = 2
-    memory = 2
+    cores         = 2
+    memory        = 2
     core_fraction = 20
   }
 
@@ -30,10 +30,10 @@ resource "yandex_compute_instance" "vm-web-db" {
       "sudo apt-get update"
     ]
     connection {
-      type = "ssh"
-      user = var.yc_user
+      type        = "ssh"
+      user        = var.yc_user
       private_key = file(var.ssh_key)
-      host = self.network_interface[0].nat_ip_address
+      host        = self.network_interface[0].nat_ip_address
     }
   }
 
@@ -60,11 +60,11 @@ resource "yandex_compute_instance" "vm-web-db" {
 
 
 resource "yandex_compute_instance" "envoy" {
-  name   = "envoy-name"
+  name = "envoy-name"
 
   resources {
-    cores  = 2
-    memory = 4
+    cores         = 2
+    memory        = 4
     core_fraction = 20
   }
 
@@ -73,10 +73,10 @@ resource "yandex_compute_instance" "envoy" {
       "sudo apt-get update"
     ]
     connection {
-      type = "ssh"
-      user = var.yc_user
+      type        = "ssh"
+      user        = var.yc_user
       private_key = file(var.ssh_key)
-      host = self.network_interface[0].nat_ip_address
+      host        = self.network_interface[0].nat_ip_address
     }
   }
 
@@ -103,11 +103,11 @@ resource "yandex_compute_instance" "envoy" {
 
 
 resource "yandex_compute_instance" "observability" {
-  name   = "observability-name"
+  name = "observability-name"
 
   resources {
-    cores  = 2
-    memory = 4
+    cores         = 2
+    memory        = 4
     core_fraction = 20
   }
 
@@ -116,10 +116,10 @@ resource "yandex_compute_instance" "observability" {
       "sudo apt-get update"
     ]
     connection {
-      type = "ssh"
-      user = var.yc_user
+      type        = "ssh"
+      user        = var.yc_user
       private_key = file(var.ssh_key)
-      host = self.network_interface[0].nat_ip_address
+      host        = self.network_interface[0].nat_ip_address
     }
   }
 

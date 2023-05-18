@@ -40,6 +40,11 @@
   ansible.builtin.pip:
     name: docker
 
+#################################################################################
+# this was need because of https://github.com/docker/docker-py/issues/3113
+# urllib3 v2 incompatibility
+# urllib3 is used in request (python library), which is need for ansible.
+
 - name: fix remove
   ansible.builtin.pip:
     name: requests
@@ -49,6 +54,7 @@
   ansible.builtin.pip:
     name: requests==2.28.1
     state: "present"
+#################################################################################
 
 - name: Pull default Docker image
   community.docker.docker_image:

@@ -1,6 +1,6 @@
 ---
 # defaults file for web_db
 envoy:
-  name: 'envoy'
+  name: "envoy"
 
 service_name: "{{ envoy.name }}"

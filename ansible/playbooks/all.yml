@@ -1,5 +1,4 @@
 ---
-
 - name: Setup role
   hosts: all
   become: yes

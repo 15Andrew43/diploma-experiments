@@ -3,70 +3,62 @@
 - debug:
     msg: "Deploy {{ env }}-{{ service_name }}"
 
-- name: Create /etc/grafana/provisioning
+- name: Create dir for datasources
   file:
-    path: ./grafana/provisioning #/ /etc/grafana/provisioning
+    path: /etc/grafana/provisioning/datasources
     state: directory
-    # owner: 472
-    # group: 472
     mode: 0777
 
-- name: Create /etc/grafana/provisioning/datasources
-  file:
-    path: ./grafana/provisioning/datasources # /etc/grafana/provisioning/datasources
-    state: directory
-    # owner: 472
-    # group: 472
+# - name: Create dir for plugins
+#   file:
+#     path: etc/grafana/provisioning/plugins
+#     state: directory
+#     mode: 0777
+
+# - name: Create dir for notifiers
+#   file:
+#     path: etc/grafana/provisioning/notifiers
+#     state: directory
+#     mode: 0777
+
+- name: Copy config.ini
+  copy:
+    src: config.ini
+    dest: /etc/grafana/config.ini
     mode: 0777
 
 - name: Copy datasource
   copy:
     src: prometheus_ds.yml
-    dest: ./grafana/provisioning/datasources/prometheus_ds.yml # /etc/grafana/provisioning/datasources/prometheus_ds.yml
-    # owner: 472
-    # group: 472
+    dest: /etc/grafana/provisioning/datasources/prometheus_ds.yml
     mode: 0777
 
-- name: Create /etc/grafana/provisioning/dashboards
+- name: Create directory for dashboard info
   file:
-    path: ./grafana/provisioning/dashboards # /etc/grafana/provisioning/dashboards
+    path: /etc/grafana/provisioning/dashboards
     state: directory
-    # owner: 472
-    # group: 472
     mode: 0777
 
 - name: Copy dashboard yml
   copy:
     src: dashboard.yml
-    dest: ./grafana/provisioning/dashboards/dashboard.yml
-    # owner: 472
-    # group: 472
+    dest: /etc/grafana/provisioning/dashboards/dashboard.yml
     mode: 0777
 
-- name: Create /etc/grafana/dashboards
+- name: Create directory for dashboard-panels
   file:
-    path: ./grafana/dashboards # /etc/grafana/provisioning/dashboards
+    path: /var/lib/grafana/dashboards
     state: directory
-    # owner: 472
-    # group: 472
     mode: 0777
 
 - name: Copy dashboards json
   copy:
     src: my-panel.json
-    dest: ./grafana/dashboards/my-panel.json
-    # owner: 472
-    # group: 472
+    dest: /var/lib/grafana/dashboards/my-panel.json
     mode: 0777
 
 - name: Change owner
-  ansible.builtin.shell: chown -R 472:472 ./grafana
-
-# - name: Copy config.ini
-#   copy:
-#     src: config.ini
-#     dest: /etc/grafana/config.ini
-#     mode: 0777
+  ansible.builtin.shell: chown -R 472:0 /etc/grafana
 
 - name: Restart a container
   community.docker.docker_container:
@@ -74,35 +66,27 @@
     image: grafana/grafana:latest # 5.2.4
     state: started
     restart: true
-    user: "472:472"
-    # group: 472 # 472
-    # user: 1000
+    user: 472
     volumes:
-      # - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning:/home/ansible_master/grafana/provisioning # /etc/grafana/provisioning
-      - ./grafana/dashboards:/home/ansible_master/grafana/dashboards
-      # - ./grafana/datasources:/etc/grafana/datasources
-      # - ./grafana/dashboards:/etc/grafana/dashboards
-    # command:
-    #   - "--user 472"
+      - /etc/grafana:/etc/grafana
+      - /var/lib/grafana:/var/lib/grafana
     env:
-      GF_SECURITY_ADMIN_USER: "admin"
-      GF_SECURITY_ADMIN_PASSWORD: "qwerty"
-      GF_USERS_ALLOW_SIGN_UP: "false"
-      GF_PATHS_PROVISIONING: "/home/ansible_master/grafana/provisioning" # to see all var: to run 'env' in docker container
+      # GF_SECURITY_ADMIN_USER: "admin"
+      # GF_SECURITY_ADMIN_PASSWORD: "qwerty"
+      # GF_USERS_ALLOW_SIGN_UP: "false"
+      # GF_PATHS_PROVISIONING: "/etc/grafana/provisioning" # to see all var: to run 'env' in docker container
       # GF_INSTALL_PLUGINS: "prometheus"
-      # GF_PATHS_CONFIG: "/etc/grafana/config.ini"
-      # user: "472"
+      # GF_PATHS_CONFIG: "./grafana/config.ini"
+      GF_PATHS_CONFIG: "/etc/grafana/config.ini"
+    # user: "472"
     ports:
       - 3000:3000
-    # volumes:
-    # - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:Z
 
 - name: Create a network
   community.docker.docker_network:
     name: my_super_network
 
-- name: Remove all but selected list of containers
+- name: Create network between grafana-container and prometheus-container
   community.docker.docker_network:
     name: my_super_network
     connected:

@@ -43,10 +43,8 @@
     state: started
     restart: true
     ports:
-     # Publish container port 9000 as host port 8080
+      # Publish container port 9000 as host port 8080
       - 8080:10000
       - 9901:9901
     volumes:
       - ./envoy/logs/file.log:/tmp/admin_access.log
-
-

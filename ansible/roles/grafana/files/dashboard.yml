@@ -9,4 +9,4 @@ providers:
     editable: true
     allowUiUpdates: true
     options:
-      path: /home/ansible_master/grafana/dashboards
+      path: /var/lib/grafana/dashboards
