@@ -23,5 +23,5 @@ https://docs.google.com/spreadsheets/d/191WWNpjJ2za6-nbG4ZoUMXMpUK8KlCIosvQB0f-o
 - observability_host(prometheus and grafana)
   - 3000: for **GRAFANA**
     - default email: admin
-    - default password: qwerty/admin
+    - default password: mysecretpassword ( to change password, modify /ansible/roles/grafana/files/config.ini )
   - 9090: for **PROMETHEUS**

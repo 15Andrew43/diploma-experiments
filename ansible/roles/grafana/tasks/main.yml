@@ -47,14 +47,14 @@
 
 - name: Create directory for dashboard-panels
   file:
-    path: /var/lib/grafana/dashboards
+    path: /var/lib/grafana/dashboards/kekule
     state: directory
     mode: 0777
 
 - name: Copy dashboards json
   copy:
     src: my-panel.json
-    dest: /var/lib/grafana/dashboards/my-panel.json
+    dest: /var/lib/grafana/dashboards/kekule/my-panel.json
     mode: 0777
 
 - name: Change owner
@@ -63,7 +63,7 @@
 - name: Restart a container
   community.docker.docker_container:
     name: grafana
-    image: grafana/grafana:latest # 5.2.4
+    image: grafana/grafana:latest
     state: started
     restart: true
     user: 472
@@ -71,14 +71,7 @@
       - /etc/grafana:/etc/grafana
       - /var/lib/grafana:/var/lib/grafana
     env:
-      # GF_SECURITY_ADMIN_USER: "admin"
-      # GF_SECURITY_ADMIN_PASSWORD: "qwerty"
-      # GF_USERS_ALLOW_SIGN_UP: "false"
-      # GF_PATHS_PROVISIONING: "/etc/grafana/provisioning" # to see all var: to run 'env' in docker container
-      # GF_INSTALL_PLUGINS: "prometheus"
-      # GF_PATHS_CONFIG: "./grafana/config.ini"
       GF_PATHS_CONFIG: "/etc/grafana/config.ini"
-    # user: "472"
     ports:
       - 3000:3000
 

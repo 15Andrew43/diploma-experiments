@@ -4,9 +4,12 @@ providers:
   - name: "Prometheus"
     orgId: 1
     folder: ""
+    folderUid: ""
     type: file
     disableDeletion: false
+    updateIntervalSeconds: 10
     editable: true
-    allowUiUpdates: true
+    allowUiUpdates: false
     options:
       path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true
