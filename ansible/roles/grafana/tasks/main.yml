@@ -15,6 +15,11 @@
     state: directory
     mode: 0777
 
+- name: Install unzip
+  ansible.builtin.apt:
+    name: unzip
+    state: present
+
 - name: Install plugins grafana-clock-panel v2.1.3
   ansible.builtin.unarchive:
     src: https://github.com/grafana/clock-panel/releases/download/v2.1.3/grafana-clock-panel-2.1.3.any.zip
@@ -47,25 +52,25 @@
 
 - name: Copy dashboard yml
   copy:
-    src: dashboard.yml
-    dest: /etc/grafana/provisioning/dashboards/dashboard.yml
+    src: all.yml
+    dest: /etc/grafana/provisioning/dashboards/all.yml
     mode: 0777
 
 - name: Create directory for dashboard-panels
   file:
-    path: /var/lib/grafana/dashboards/kekule
+    path: /var/lib/grafana/dashboards
     state: directory
     mode: 0777
 
 - name: Copy dashboards json
   copy:
-    src: my-panel.json
-    dest: /var/lib/grafana/dashboards/kekule/my-panel.json
+    src: mypanel.json
+    # dest: /var/lib/grafana/dashboards/mypanel.json
+    dest: /var/lib/grafana/dashboards/mypanel.json
     mode: 0777
 
 - name: Change owner
   ansible.builtin.shell: chown -R 472:0 /etc/grafana
-
 - name: Restart a container
   community.docker.docker_container:
     name: grafana
@@ -74,10 +79,17 @@
     restart: true
     user: 472
     volumes:
-      - /etc/grafana:/etc/grafana
+      # - /etc/grafana:/etc/grafana
+      # - /var/lib/grafana:/var/lib/grafana
+      # - aaasdasdasdasdasdasds
+      - /etc/grafana/config.ini:/etc/grafana/config.ini:ro
+      - /etc/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - /etc/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - /var/lib/grafana/dashboards/mypanel.json:/var/lib/grafana/dashboards/mypanel.json
       - /var/lib/grafana:/var/lib/grafana
     env:
       GF_PATHS_CONFIG: "/etc/grafana/config.ini"
+      GF_USERS_DEFAULT_THEME: "light"
     ports:
       - 3000:3000
 
@@ -91,3 +103,17 @@
     connected:
       - grafana
       - prometheus
+
+- name: Install json
+  ansible.builtin.pip:
+    name: simplejson
+    state: "present"
+
+- name: Copy loader
+  copy:
+    src: load_dashboard.py
+    dest: /etc/grafana/load_dashboard.py
+    mode: 0777
+
+- name: run loader
+  command: python3 /etc/grafana/load_dashboard.py
