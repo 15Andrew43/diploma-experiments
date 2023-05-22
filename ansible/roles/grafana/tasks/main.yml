@@ -109,6 +109,11 @@
     name: simplejson
     state: "present"
 
+- name: Install grafanalib
+  ansible.builtin.pip:
+    name: grafanalib
+    state: "present"
+
 - name: Copy loader
   copy:
     src: load_dashboard.py
