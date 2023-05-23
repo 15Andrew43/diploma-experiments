@@ -122,8 +122,8 @@
   environment:
     GF_SECURITY_ADMIN_USER: "{{ admin_user }}"
     GF_SECURITY_ADMIN_PASSWORD: "{{admin_password }}"
-#   register: command_output
+  register: command_output
 
-# - name: Print output
-#   debug:
-#     var: command_output.stdout
+- name: Print output
+  debug:
+    var: command_output.stdout

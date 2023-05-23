@@ -23,7 +23,7 @@ ansible-playbook playbooks/docker.yml --forks=4
 
 ansible-playbook playbooks/web_db.yml --forks=2
 ansible-playbook playbooks/envoy.yml
-ansible-playbook playbooks/prometheus.yml 
+ansible-playbook playbooks/prometheus.yml
 ansible-playbook playbooks/grafana.yml
 
 echo
