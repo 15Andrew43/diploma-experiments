@@ -1,13 +1,17 @@
 admin:
   access_log_path: /tmp/admin_access.log
   address:
-    socket_address: { address: 0.0.0.0, port_value: 9901 }
+    socket_address: 
+      address: 0.0.0.0
+      port_value: 9901
 
 static_resources:
   listeners:
   - name: listener_0
     address:
-      socket_address: { address: 0.0.0.0, port_value: 10000 }
+      socket_address: 
+        address: 0.0.0.0
+        port_value: 10000
     filter_chains:
     - filters:
       - name: envoy.filters.network.http_connection_manager
@@ -75,5 +79,5 @@ static_resources:
             address:
               socket_address:
                 address: {{ host }}
-                port_value: 8099
+                port_value: {{ web_db_port }} # 8099
 {% endfor %}

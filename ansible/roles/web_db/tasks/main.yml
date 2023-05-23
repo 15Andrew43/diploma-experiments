@@ -10,4 +10,4 @@
     state: started
     pull: true
     ports:
-      - "8099:8099"
+      - "{{ web_db_port }}:8099"

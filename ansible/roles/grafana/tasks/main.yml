@@ -9,22 +9,22 @@
     state: directory
     mode: 0777
 
-- name: Create dir for plugins
-  file:
-    path: /var/lib/grafana/plugins
-    state: directory
-    mode: 0777
+# - name: Create dir for plugins
+#   file:
+#     path: /var/lib/grafana/plugins
+#     state: directory
+#     mode: 0777
 
-- name: Install unzip
-  ansible.builtin.apt:
-    name: unzip
-    state: present
+# - name: Install unzip
+#   ansible.builtin.apt:
+#     name: unzip
+#     state: present
 
-- name: Install plugins grafana-clock-panel v2.1.3
-  ansible.builtin.unarchive:
-    src: https://github.com/grafana/clock-panel/releases/download/v2.1.3/grafana-clock-panel-2.1.3.any.zip
-    dest: /var/lib/grafana/plugins
-    remote_src: yes
+# - name: Install plugins grafana-clock-panel v2.1.3
+#   ansible.builtin.unarchive:
+#     src: https://github.com/grafana/clock-panel/releases/download/v2.1.3/grafana-clock-panel-2.1.3.any.zip
+#     dest: /var/lib/grafana/plugins
+#     remote_src: yes
 
 # - name: Create dir for notifiers
 #   file:
@@ -39,35 +39,34 @@
     mode: 0777
 
 - name: Copy datasource
-  copy:
+  template:
     src: prometheus_ds.yml
     dest: /etc/grafana/provisioning/datasources/prometheus_ds.yml
     mode: 0777
 
-- name: Create directory for dashboard info
-  file:
-    path: /etc/grafana/provisioning/dashboards
-    state: directory
-    mode: 0777
+# - name: Create directory for dashboard info
+#   file:
+#     path: /etc/grafana/provisioning/dashboards
+#     state: directory
+#     mode: 0777
 
-- name: Copy dashboard yml
-  copy:
-    src: all.yml
-    dest: /etc/grafana/provisioning/dashboards/all.yml
-    mode: 0777
+# - name: Copy dashboard yml
+#   copy:
+#     src: all.yml
+#     dest: /etc/grafana/provisioning/dashboards/all.yml
+#     mode: 0777
 
-- name: Create directory for dashboard-panels
-  file:
-    path: /var/lib/grafana/dashboards
-    state: directory
-    mode: 0777
+# - name: Create directory for dashboard-panels
+#   file:
+#     path: /var/lib/grafana/dashboards
+#     state: directory
+#     mode: 0777
 
-- name: Copy dashboards json
-  copy:
-    src: mypanel.json
-    # dest: /var/lib/grafana/dashboards/mypanel.json
-    dest: /var/lib/grafana/dashboards/mypanel.json
-    mode: 0777
+# - name: Copy dashboards json
+#   copy:
+#     src: mypanel.json
+#     dest: /var/lib/grafana/dashboards/mypanel.json
+#     mode: 0777
 
 - name: Change owner
   ansible.builtin.shell: chown -R 472:0 /etc/grafana
@@ -81,17 +80,17 @@
     volumes:
       # - /etc/grafana:/etc/grafana
       # - /var/lib/grafana:/var/lib/grafana
-      # - aaasdasdasdasdasdasds
-      - /etc/grafana/config.ini:/etc/grafana/config.ini:ro
-      - /etc/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - /etc/grafana/config.ini:/etc/grafana/config.ini
+      # - /etc/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - /etc/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - /var/lib/grafana/dashboards/mypanel.json:/var/lib/grafana/dashboards/mypanel.json
-      - /var/lib/grafana:/var/lib/grafana
+      # - /var/lib/grafana:/var/lib/grafana
     env:
-      GF_PATHS_CONFIG: "/etc/grafana/config.ini"
-      GF_USERS_DEFAULT_THEME: "light"
+      GF_PATHS_CONFIG: /etc/grafana/config.ini
+      GF_USERS_DEFAULT_THEME: light
+      GF_SECURITY_ADMIN_USER: "{{ admin_user }}"
+      GF_SECURITY_ADMIN_PASSWORD: "{{admin_password }}"
     ports:
-      - 3000:3000
+      - "{{ grafana_port }}:3000"
 
 - name: Create a network
   community.docker.docker_network:
@@ -104,21 +103,27 @@
       - grafana
       - prometheus
 
-- name: Install json
-  ansible.builtin.pip:
-    name: simplejson
-    state: "present"
+- name: Install multiple packages with pip
+  pip:
+    name:
+      - simplejson
+      - grafanalib
+      - argparse
+    state: present
 
-- name: Install grafanalib
-  ansible.builtin.pip:
-    name: grafanalib
-    state: "present"
-
-- name: Copy loader
+- name: Copy python-script
   copy:
     src: load_dashboard.py
     dest: /etc/grafana/load_dashboard.py
     mode: 0777
 
-- name: run loader
-  command: python3 /etc/grafana/load_dashboard.py
+- name: Run python-script to deploy default dashboard with default panels
+  command: python3 /etc/grafana/load_dashboard.py --grafana_port="{{ grafana_port }}"
+  environment:
+    GF_SECURITY_ADMIN_USER: "{{ admin_user }}"
+    GF_SECURITY_ADMIN_PASSWORD: "{{admin_password }}"
+#   register: command_output
+
+# - name: Print output
+#   debug:
+#     var: command_output.stdout

@@ -43,8 +43,7 @@
     state: started
     restart: true
     ports:
-      # Publish container port 9000 as host port 8080
-      - 8080:10000
-      - 9901:9901
+      - "{{ envoy_proxy_port }}:10000"
+      - "{{ envoy_admin_port }}:9901"
     volumes:
       - ./envoy/logs/file.log:/tmp/admin_access.log

@@ -24,6 +24,6 @@
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"
     ports:
-      - 9090:9090
+      - "{{ prometheus_port }}:9090"
     volumes:
       - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:Z
