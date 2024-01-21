@@ -1,0 +1,8 @@
+#cloud-config
+users:
+  - name: ansible_master
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC5q/t0PxDO2q/KIBoqGWJj4BghWYAJLsbqaTfy9Kj/lHvO6P9CgWAP49rOSr3qe2VKq3W21JBwcdlWb8dspBXDtYmNZ5+WrshHkM34FJU6SZuiUOlBP27b+ZaFDwsMTukraLHG5zQOuEGwyGtXPV2C/f4A5oEduDT6a2i1CG88b/jkcvfTmE50bwfY9R8cF4W39hGIaW1ELV1w/iKPQgdvzXT4B6ZGNZXIbiMPUCF4mvDtr8S8j6iizuplgOfGVQ4N5QbC/qbD7p2f8HPZX6NrAqdl9bGfM7x80n8iGzepw2iY8iRNXGH5+BrBFn04jgdXdV1Zb2y8bpl83F7JpB4ix5UILiwPvC3PU5fM1t0QjHUSvqOCGSavudOWfrh/pPlEUXADN+uX0vV4ovrjxBVcUjN5tLxlaHQmsPth8bgxvyp2JWN3Pw1scB+2kgs6C5q2TzUANX3zN9wA5GL/3Dcvf+BcTi/lgFo6HM+qxXTVd7HCgGwGb6uTU2RCWYU5hms= andrew_borovets@MacBook-Pro-Andrej-2.local

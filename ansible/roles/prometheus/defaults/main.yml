@@ -1,0 +1,6 @@
+---
+# defaults file for prometheus
+prometheus:
+  name: "prometheus"
+
+service_name: "{{ prometheus.name }}"

@@ -1,0 +1,6 @@
+env: dev
+web_db_port: 8099
+envoy_admin_port: 9901
+envoy_proxy_port: 8080
+prometheus_port: 9090
+grafana_port: 3000

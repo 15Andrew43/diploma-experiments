@@ -1,0 +1,10 @@
+---
+# defaults file for grafana
+grafana:
+  name: "grafana"
+  admin_user: "admin"
+  password: "mysecretpassword"
+
+service_name: "{{ grafana.name }}"
+admin_user: "{{ grafana.admin_user }}"
+admin_password: "{{ grafana.password }}"

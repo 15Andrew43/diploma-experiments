@@ -1,0 +1,7 @@
+datasources:
+  - name: Prometheus
+    access: proxy
+    type: prometheus
+    url: "http://prometheus:{{ prometheus_port }}"
+    isDefault: true
+    editable: true

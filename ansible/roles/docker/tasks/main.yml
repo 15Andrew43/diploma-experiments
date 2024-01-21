@@ -1,0 +1,70 @@
+---
+# tasks file for docker
+
+- name: Install aptitude
+  ansible.builtin.apt:
+    name: aptitude
+    state: latest
+    update_cache: true
+
+- name: Install required system packages
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
+
+- name: Add Docker GPG apt Key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+    state: present
+
+- name: Update apt and install docker-ce
+  ansible.builtin.apt:
+    name: docker-ce
+    state: latest
+    update_cache: true
+
+- name: Install Docker Module for Python
+  ansible.builtin.pip:
+    name: docker
+
+#################################################################################
+# this was need because of https://github.com/docker/docker-py/issues/3113
+# urllib3 v2 incompatibility
+# urllib3 is used in request (python library), which is need for ansible.
+
+- name: fix remove
+  ansible.builtin.pip:
+    name: requests
+    state: "absent"
+
+- name: fix install
+  ansible.builtin.pip:
+    name: requests==2.28.1
+    state: "present"
+#################################################################################
+
+- name: Pull default Docker image
+  community.docker.docker_image:
+    name: "{{ default_container_image }}"
+    source: pull
+
+- name: Create default containers
+  community.docker.docker_container:
+    name: "{{ default_container_name }}{{ item }}"
+    image: "{{ default_container_image }}"
+    command: "{{ default_container_command }}"
+    state: present
+  with_sequence: count={{ container_count }}

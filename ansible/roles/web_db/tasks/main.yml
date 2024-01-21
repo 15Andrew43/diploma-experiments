@@ -1,0 +1,13 @@
+---
+# tasks file for web_db
+- debug:
+    msg: "Deploy {{ env }}-{{ service_name }}"
+
+- name: Pull and run a container
+  community.docker.docker_container:
+    name: web_db
+    image: avborovets/restful_api_example
+    state: started
+    pull: true
+    ports:
+      - "{{ web_db_port }}:8099"

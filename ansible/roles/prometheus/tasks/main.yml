@@ -1,0 +1,29 @@
+---
+# tasks file for prometheus
+- debug:
+    msg: "Deploy {{ env }}-{{ service_name }}"
+
+- name: Create ./prometheus
+  file:
+    path: ./prometheus
+    state: directory
+    mode: 0777
+
+- name: generate prometheus.yaml
+  template:
+    src: prometheus.j2
+    dest: ./prometheus/prometheus.yaml
+    mode: 0777
+
+- name: Restart a container
+  community.docker.docker_container:
+    name: prometheus
+    image: prom/prometheus
+    state: started
+    restart: true
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+    ports:
+      - "{{ prometheus_port }}:9090"
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:Z
